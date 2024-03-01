@@ -22,11 +22,13 @@ namespace Chevaliers
 
         private Dictionary<Place, Border> visiblePlaces = new();
         private Dictionary<(Place, Place), Line> paths = new();
-        private ForceCalculator forceCalculator;
-        private DispatcherTimer timer;
-        private const int delay = 10;
-        private const int width = 1600;
-        private const int height = 800;
+        private Simulation simulator;
+        private DispatcherTimer simTimer;
+        private DispatcherTimer renderTimer;
+        private const int simDelay = 10;
+        private const int renderDelay = 250;
+        private const int width = 1900;
+        private const int height = 1200;
 
         private float zoomSpeed = 0.001f;
         private float zoom = 1;
@@ -48,20 +50,27 @@ namespace Chevaliers
 
             Dictionary<int, Place> places = Knights3();
             //Dictionary<int, Place> places = Knights0();
-            forceCalculator = new(places, width, height);
+            simulator = new(places, width, height);
+            simulator.TopLeft = new Vector2(0, 0);
+            simulator.BottomRight = new Vector2(width, height);
 
             MakePlaces(places);
 
             PlacePaths();
 
-            timer = new DispatcherTimer
+            simTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(delay)
+                Interval = TimeSpan.FromMilliseconds(simDelay)
             };
-            timer.Tick += Step;
+            simTimer.Tick += Step;
+            simTimer.Start();
 
-            timer.Start();
-
+            renderTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(renderDelay)
+            };
+            renderTimer.Tick += Render;
+            renderTimer.Start();
         }
 
         private void MakePlaces(Dictionary<int, Place> places)
@@ -69,7 +78,7 @@ namespace Chevaliers
             foreach (Place place in places.Values)
             {
                 MakePlace(place);
-                MovePlace(place, forceCalculator.GetPosition(place));
+                MovePlace(place, simulator.GetPosition(place));
 
                 MakePaths(place);
             }
@@ -85,7 +94,7 @@ namespace Chevaliers
             Vector2 position;
             foreach(Place place in visiblePlaces.Keys)
             {
-                position = forceCalculator.GetPosition(place);
+                position = simulator.GetPosition(place);
 
                 if (position.X < minX)
                     minX = position.X;
@@ -114,50 +123,67 @@ namespace Chevaliers
 
         private void Step(object? sender, EventArgs e)
         {
-            forceCalculator.Step();
+            simulator.Step();
+        }
+
+        private void Render(object? sender, EventArgs e)
+        {
             foreach (Place place in visiblePlaces.Keys)
             {
-                MovePlace(place, forceCalculator.GetPosition(place));
+                MovePlace(place, simulator.GetPosition(place));
             }
             PlacePaths();
-
-            var zoom = FindZoom();
-
-            //plan.RenderTransform = new ScaleTransform(zoom.zoom, zoom.zoom);//, zoom.centerX, zoom.centerY);
         }
 
         private void MakePlace(Place place)
         {
             TextBlock textBlock = new()
             {
-                Text = place.ID.ToString()
-            };
+                Text = place.ID.ToString(),
+                FontSize = 14,
+                Background = new SolidColorBrush(Color.FromArgb(200, 0, 255, 255))
+        };
 
             Border border = new()
             {
                 Child = textBlock,
                 BorderBrush = Brushes.Black,
-                BorderThickness = new Thickness(1)
+                BorderThickness = new Thickness(2)
             };
 
             plan.Children.Add(border);
-            
+            Canvas.SetZIndex(border, 1);
+
             visiblePlaces[place] = border;
         }
         
         private void MakePaths(Place place)
         {
+            LinearGradientBrush gradientBrush = new();
+            gradientBrush.StartPoint = new Point(0, 0);
+            gradientBrush.EndPoint = new Point(1, 1);
+            
+            GradientStop startGS = new GradientStop();
+            startGS.Color = Colors.Blue;
+            startGS.Offset = 0.0;
+            gradientBrush.GradientStops.Add(startGS);
+
+            GradientStop endGS = new GradientStop();
+            endGS.Color = Colors.Red;
+            endGS.Offset = 1;
+            gradientBrush.GradientStops.Add(endGS);
+
             foreach (Path path in place.Paths)
             {
                 var fromTo = (place, Place.PlaceIndex[path.To]);
                 
-                if (paths.ContainsKey(fromTo))
-                    continue;
+                //if (paths.ContainsKey(fromTo))
+                //    continue;
 
                 Line line = new()
                 {
-                    StrokeThickness = 1,
-                    Stroke = Brushes.Gray
+                    StrokeThickness = 2,
+                    Stroke = gradientBrush
                 };
 
                 paths[fromTo] = line;
@@ -172,13 +198,13 @@ namespace Chevaliers
             {
                 Line line = kvp.Value;
 
-                Vector2 from = forceCalculator.GetPosition(kvp.Key.Item1);
-                Vector2 to = forceCalculator.GetPosition(kvp.Key.Item2);
+                Vector2 from = simulator.GetPosition(kvp.Key.Item1);
+                Vector2 to = simulator.GetPosition(kvp.Key.Item2);
 
-                line.X1 = from.X;
-                line.X2 = to.X;
-                line.Y1 = from.Y;
-                line.Y2 = to.Y;
+                line.X1 = from.X + 1;
+                line.X2 = to.X - 1;
+                line.Y1 = from.Y + 1;
+                line.Y2 = to.Y - 1;
             }
         }
 
