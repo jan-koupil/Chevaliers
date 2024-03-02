@@ -28,7 +28,7 @@ namespace Chevaliers
         private const int simDelay = 10;
         private const int renderDelay = 250;
         private const int width = 1900;
-        private const int height = 1200;
+        private const int height = 1100;
 
         private float zoomSpeed = 0.001f;
         private float zoom = 1;
@@ -50,6 +50,9 @@ namespace Chevaliers
 
             Dictionary<int, Place> places = Knights3();
             //Dictionary<int, Place> places = Knights0();
+
+            Place.EvaluateDeadEnds();
+
             simulator = new(places, width, height);
             simulator.TopLeft = new Vector2(0, 0);
             simulator.BottomRight = new Vector2(width, height);
@@ -140,9 +143,26 @@ namespace Chevaliers
             TextBlock textBlock = new()
             {
                 Text = place.ID.ToString(),
-                FontSize = 14,
-                Background = new SolidColorBrush(Color.FromArgb(200, 0, 255, 255))
-        };
+                FontSize = 14
+            };
+
+            if (place.ID == 0)
+                textBlock.Background = Brushes.Green;
+
+            else if (place.EndGame)
+                textBlock.Background = Brushes.SandyBrown;
+
+            else if (place.Enemies.Count > 0)
+                textBlock.Background = Brushes.Orange;
+
+            else if (place.IsDeadEnd)
+                textBlock.Background = Brushes.Yellow;
+
+            else if (place.HasNoEntry)
+                textBlock.Background = Brushes.Red;
+
+            else
+                textBlock.Background = new SolidColorBrush(Color.FromArgb(200, 0, 255, 255));
 
             Border border = new()
             {
@@ -159,22 +179,24 @@ namespace Chevaliers
         
         private void MakePaths(Place place)
         {
-            LinearGradientBrush gradientBrush = new();
-            gradientBrush.StartPoint = new Point(0, 0);
-            gradientBrush.EndPoint = new Point(1, 1);
-            
-            GradientStop startGS = new GradientStop();
-            startGS.Color = Colors.Blue;
-            startGS.Offset = 0.0;
-            gradientBrush.GradientStops.Add(startGS);
 
-            GradientStop endGS = new GradientStop();
-            endGS.Color = Colors.Red;
-            endGS.Offset = 1;
-            gradientBrush.GradientStops.Add(endGS);
 
             foreach (Path path in place.Paths)
             {
+                //LinearGradientBrush gradientBrush = new();
+                //gradientBrush.StartPoint = new Point(0, 0);
+                //gradientBrush.EndPoint = new Point(1, 1);
+
+                //GradientStop startGS = new GradientStop();
+                //startGS.Color = Colors.Blue;
+                //startGS.Offset = 0.0;
+                //gradientBrush.GradientStops.Add(startGS);
+
+                //GradientStop endGS = new GradientStop();
+                //endGS.Color = Colors.Red;
+                //endGS.Offset = 1;
+                //gradientBrush.GradientStops.Add(endGS);
+
                 var fromTo = (place, Place.PlaceIndex[path.To]);
                 
                 //if (paths.ContainsKey(fromTo))
@@ -183,7 +205,8 @@ namespace Chevaliers
                 Line line = new()
                 {
                     StrokeThickness = 2,
-                    Stroke = gradientBrush
+                    //Stroke = gradientBrush
+                    Stroke = Brushes.Black
                 };
 
                 paths[fromTo] = line;
@@ -205,6 +228,10 @@ namespace Chevaliers
                 line.X2 = to.X - 1;
                 line.Y1 = from.Y + 1;
                 line.Y2 = to.Y - 1;
+
+                //LinearGradientBrush brush = (LinearGradientBrush)line.Stroke;
+                //brush.StartPoint = new Point(from.X, from.Y);
+                //brush.EndPoint = new Point(to.X, to.Y);
             }
         }
 
@@ -262,6 +289,7 @@ namespace Chevaliers
 
             new Place(0)
                 .AddPath(13)
+                .AddPath(52)
                 .AddPath(143);
 
             new Place(1)
@@ -404,6 +432,7 @@ namespace Chevaliers
                 .AddPath(167);
 
             new Place(34)
+                .AddPath(42)
                 .AddPath(83)
                 .AddPath(125);
 
@@ -443,10 +472,10 @@ namespace Chevaliers
             new Place(43)
                 .AddPath(16)
                 .AddPath(207)
-                .AddPath(new Path(56, "Inteligence 12"));
+                .AddPath(new Path(5604, "Inteligence 12"));
 
             new Place(44)
-                .AddPath(new Path(56, "Páže"))
+                .AddPath(new Path(5602, "Páže"))
                 .AddPath(150)
                 .AddPath(64);
 
@@ -480,7 +509,7 @@ namespace Chevaliers
                 .AddPath(178);
 
             new Place(52)
-                .AddPath(3);
+                .AddPath(0);
 
             new Place(53)
                 .AddPath(new Path(217, "Inteligence 12"))
@@ -495,7 +524,17 @@ namespace Chevaliers
                 .AddPath(95)
                 .AddPath(175);
 
-            new Place(56);
+            new Place(5601)
+                .AddPath(167); 
+            
+            new Place(5602)
+                .AddPath(44); 
+            
+            new Place(5603)
+                .AddPath(105); 
+            
+            new Place(5604)
+                .AddPath(43);
 
             new Place(57)
                 .AddPath(15)
@@ -511,7 +550,7 @@ namespace Chevaliers
                 .AddPath(74);
 
             new Place(60)
-                .AddPath(195)
+                .AddPath(193)
                 .AddPath(69);
 
             //**// jít s drahokamem na 204
@@ -693,7 +732,7 @@ namespace Chevaliers
 
             new Place(105)
                 .AddPath(150)
-                .AddPath(new Path(56, "Obratnost 10"))
+                .AddPath(new Path(5603, "Obratnost 10"))
                 .AddPath(19);
 
             new Place(106)
@@ -764,7 +803,9 @@ namespace Chevaliers
                 .AddPath(147);
 
             new Place(124)
-                .AddPath(new Path(90, "Síla 15"));
+                .AddPath(new Path(90, "Síla 15"))
+                .AddPath(130)
+                .AddPath(150);
 
             new Place(125)
                 .AddPath(185)
@@ -776,7 +817,8 @@ namespace Chevaliers
 
             new Place(127)
                 .AddPath(59)
-                .AddPath(63);
+                .AddPath(63)
+                .AddPath(158);
 
             new Place(128)
                 .AddPath(141);
@@ -930,7 +972,7 @@ namespace Chevaliers
 
             new Place(167)
                 .AddPath(191)
-                .AddPath(56)
+                .AddPath(5601)
                 .AddPath(150);
 
             new Place(168)
