@@ -60,6 +60,11 @@ namespace Chevaliers
                 BottomRight = new Vector2(width, height)
             };
 
+            attractPowerInput.Text = simulator.attractivePower.ToString();
+            attractFactorInput.Text = simulator.PathStiffness.ToString();
+            repelFactorInput.Text = simulator.repulsiveFactor.ToString();
+            repelPowerInput.Text = simulator.repulsivePower.ToString();
+
             MakePlaces(places);
 
             //PlacePaths();
@@ -149,7 +154,7 @@ namespace Chevaliers
                 textBlock.Background = Brushes.Green;
 
             else if (place.EndGame)
-                textBlock.Background = Brushes.SandyBrown;
+                textBlock.Background = Brushes.Violet;
 
             else if (place.Enemies.Count > 0)
                 textBlock.Background = Brushes.Orange;
@@ -267,6 +272,18 @@ namespace Chevaliers
                 (coords.X - topLeft.X) / realDimensoons.X * viewDimensions.X + viewPortTopLeft.X,
                 (coords.Y - topLeft.Y) / realDimensoons.Y * viewDimensions.Y + viewPortTopLeft.Y
             );
+        }
+
+        private void controlsChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                simulator.attractivePower = float.Parse(attractPowerInput.Text);
+                simulator.PathStiffness = float.Parse(attractFactorInput.Text);
+                simulator.repulsiveFactor = float.Parse(repelFactorInput.Text);
+                simulator.repulsivePower = float.Parse(repelPowerInput.Text);
+            }
+            catch { };
         }
     }
 }

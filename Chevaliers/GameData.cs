@@ -40,7 +40,7 @@ namespace Chevaliers
                 .AddPath(143);
 
             new Place(1)
-                .AddPath(147)
+                .AddPath(47)
                 .AddPath(25)
                 .AddPath(125)
                 .AddPath(new Path(69, "poprvé"));
@@ -99,6 +99,7 @@ namespace Chevaliers
                 .AddPath(124);
 
             new Place(15)
+                .AddPath(7)
                 .AddPath(124)
                 .AddPath(174);
 
@@ -126,7 +127,7 @@ namespace Chevaliers
 
             new Place(21)
                 .AddPath(176)
-                .AddItem(misa);
+                .AddPath(20601);
 
             new Place(22)
                 .AddPath(new Path(92, "15 bodů síly"))
@@ -190,6 +191,7 @@ namespace Chevaliers
 
             new Place(36)
                 .AddItem(snakeKey)
+                .AddPath(1403)
                 .AddPath(209);
 
             new Place(37)
@@ -307,7 +309,7 @@ namespace Chevaliers
             new Place(62)
                 .AddPath(149)
                 .AddItem(cloverKey)
-                .AddPath(140);
+                .AddPath(1401);
 
             new Place(63)
                 .AddEnemy("Warrior 7/14/20/30")
@@ -323,6 +325,7 @@ namespace Chevaliers
 
             new Place(66)
                 .AddPath(209)
+                .AddPath(20602)
                 .AddPath(5);
 
             new Place(67)
@@ -356,6 +359,7 @@ namespace Chevaliers
                 .AddPath(new Path(109, "Obratnost 9").AddRequirement(ropeHook));
 
             new Place(73)
+                .AddPath(86)
                 .AddPath(101)
                 .AddPath(150);
 
@@ -365,6 +369,7 @@ namespace Chevaliers
 
             new Place(75)
                 .AddItem(snakeKey)
+                .AddPath(1404)
                 .AddPath(121)
                 .AddPath(208);
 
@@ -403,7 +408,7 @@ namespace Chevaliers
                 .AddPath(190);
 
             new Place(86)
-                .AddPath(75);
+                .AddPath(73);
 
             new Place(87)
                 .AddPath(209)
@@ -537,7 +542,7 @@ namespace Chevaliers
 
             new Place(120)
                 .AddPath(149)
-                .AddPath(140)
+                .AddPath(1402)
                 .AddItem(cloverKey);
 
             new Place(121)
@@ -614,9 +619,17 @@ namespace Chevaliers
                 .AddPath(40);
 
             //klíče - vysvětlení
-            new Place(140)
-                .AddPath(62)
+            new Place(1401)
+                .AddPath(62);
+
+            new Place(1402)
                 .AddPath(120);
+            
+            new Place(1403)
+                .AddPath(36);
+            
+            new Place(1404)
+                .AddPath(75);
 
             new Place(141)
                 .AddEnemy("Skeleton 11/8/8/10")
@@ -861,9 +874,13 @@ namespace Chevaliers
             new Place(205)
                 .AddPath(107);
 
-            new Place(206)
+            new Place(20601)
                 .AddItem(new Item("Kouzelný háček"))
                 .AddPath(21);
+
+            new Place(20602)
+                .AddItem(new Item("Kouzelný háček"))
+                .AddPath(66);
 
             new Place(207)
                 .AddPath(43)
@@ -926,9 +943,11 @@ namespace Chevaliers
 
             new Place(222);
 
-            new Place(223);
+            new Place(223)
+                .AddPath(110);
 
-            new Place(224);
+            new Place(224)
+                .AddPath(88);
 
 
 

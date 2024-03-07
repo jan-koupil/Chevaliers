@@ -16,11 +16,11 @@ namespace Chevaliers
         private Dictionary<Place, Vector2> forces = new();
         private Dictionary<int, Place> PlaceIndex;
 
-        public float repulsiveFactor = 500000f; //2 mocnina: 500 - abs: 4 // 3. mocnina 35000 - abs: 14
-        public float repulsivePower = 3;
+        public float repulsiveFactor = 5000000;// 500000f; //2 mocnina: 500 - abs: 4 // 3. mocnina 35000 - abs: 14
+        public float repulsivePower = 3; //3;
 
-        public float PathStiffness = 0.005f; //2 mocnina: 500000 - lin: 0.1
-        public float attractivePower = 2;
+        public float PathStiffness = 0.5f;//0.005f; //2 mocnina: 500000 - lin: 0.1
+        public float attractivePower = 1; //2;
 
 
         public float Friction = 0.1f; //0.1f;

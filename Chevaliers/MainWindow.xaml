@@ -7,7 +7,30 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Canvas x:Name="plan" MouseWheel="Canvas_MouseWheel">
-        </Canvas>
+        <Canvas x:Name="plan" />
+        <Grid Width="100" Height="100" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="cesta *" Grid.Column="0" Grid.Row="0"/>
+            <TextBlock Text="cesta ^" Grid.Column="0" Grid.Row="1"/>
+            <TextBlock Text="odp. *" Grid.Column="0" Grid.Row="2"/>
+            <TextBlock Text="odp. ^" Grid.Column="0" Grid.Row="3"/>
+            <TextBlock Text="barva" Grid.Column="0" Grid.Row="4"/>
+            
+            <TextBox x:Name="attractFactorInput" Grid.Column="1" Grid.Row="0" TextChanged="controlsChanged"/>
+            <TextBox x:Name="attractPowerInput" Grid.Column="1" Grid.Row="1" TextChanged="controlsChanged"/>
+            <TextBox x:Name="repelFactorInput" Grid.Column="1" Grid.Row="2" TextChanged="controlsChanged"/>
+            <TextBox x:Name="repelPowerInput" Grid.Column="1" Grid.Row="3" TextChanged="controlsChanged"/>
+            <Button x:Name="colourBtn" Content="Barva" Grid.Column="1" Grid.Row="4"/>
+        </Grid>
     </Grid>
 </Window>
